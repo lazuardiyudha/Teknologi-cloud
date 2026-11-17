@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CloudLearn – Teknologi Berbasis Cloud</title>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+:root{color-scheme:light dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{background:#f8fafc;color:#0f172a;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){body{background:#020617;color:#e2e8f0}}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:1rem}
+@media (prefers-color-scheme:dark){.card{background:#0f172a;border-color:#1e293b}}
+.bar{transition:width .4s,background .4s}
+</style>
+</head>
+<body class="antialiased">
+<nav class="sticky top-0 z-20 backdrop-blur bg-white/80 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800">
+ <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+  <a href="#top" class="font-bold text-sky-600">☁️ CloudLearn</a>
+  <div class="flex gap-4 text-sm overflow-x-auto whitespace-nowrap">
+   <a href="#modul" class="hover:text-sky-600">Modul</a><a href="#alur" class="hover:text-sky-600">Diagram</a><a href="#lab" class="hover:text-sky-600">Praktikum</a><a href="#dosen" class="hover:text-sky-600">Dosen</a>
+  </div>
+ </div>
+</nav>
+
+<header id="top" class="bg-gradient-to-br from-sky-600 to-indigo-700 text-white">
+ <div class="max-w-5xl mx-auto px-4 py-14 text-center">
+  <p class="text-sky-100 text-sm mb-2">Semester 7 • Teknologi Informasi</p>
+  <p class="inline-block bg-white/15 border border-white/30 rounded-full px-4 py-1 text-sm mb-4">👨‍🏫 Dosen Pengampu: <b>Lazuardi Yudha Pradana, S.Kom., M.Kom.</b></p>
+  <h1 class="text-3xl sm:text-5xl font-extrabold">Teknologi Berbasis Cloud</h1>
+  <p class="mt-4 max-w-2xl mx-auto text-sky-50">14 pertemuan: teori runut, studi kasus, praktikum, dan kuis. Belajar konsep cloud lewat modul, diagram alur, praktikum simulasi, dan kuis otomatis.</p>
+  <div class="mt-6 flex flex-wrap justify-center gap-3 text-sm">
+   <a href="#modul" class="bg-white text-sky-700 font-semibold px-5 py-2 rounded-full">Mulai Belajar</a>
+   <a href="#lab" class="border border-white/60 px-5 py-2 rounded-full">Buka Lab</a>
+  </div>
+  <div class="mt-8 max-w-sm mx-auto"><div class="flex justify-between text-xs mb-1"><span>Progres modul</span><span id="progTxt">0/14</span></div><div class="h-2 bg-white/25 rounded-full"><div id="progBar" class="h-2 bg-white rounded-full bar" style="width:0%"></div></div></div>
+ </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-4 py-10 space-y-16">
+
+<section id="modul">
+ <h2 class="text-2xl font-bold mb-1">📚 Modul Pembelajaran</h2>
+ <p class="text-slate-500 dark:text-slate-400 mb-5">Pilih modul, baca teori dan contoh nyata, lalu tandai selesai.</p>
+ <div id="modTabs" class="flex gap-2 overflow-x-auto pb-2"></div>
+ <article id="modBody" class="card p-5 sm:p-7 mt-3"></article>
+</section>
+
+<section id="alur">
+ <h2 class="text-2xl font-bold mb-1">🔀 Diagram Alur Sistem Cloud</h2>
+ <p class="text-slate-500 dark:text-slate-400 mb-5">Ketuk setiap komponen untuk melihat perannya. Contoh: pengguna membuka toko online saat promo.</p>
+ <div class="card p-5">
+  <div id="flow" class="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-2"></div>
+  <div id="flowInfo" class="mt-5 p-4 rounded-xl bg-sky-50 dark:bg-sky-950 text-sm"></div>
+  <button id="sendReq" class="mt-4 bg-sky-600 text-white px-4 py-2 rounded-lg text-sm">▶ Jalankan animasi permintaan</button>
+ </div>
+</section>
+
+<section id="lab">
+ <h2 class="text-2xl font-bold mb-1">🧪 Praktikum: Simulasi Lingkungan Cloud</h2>
+ <p class="text-slate-500 dark:text-slate-400 mb-5">Atur trafik, luncurkan atau hentikan server virtual, aktifkan auto-scaling, dan amati beban serta biaya.</p>
+ <div class="grid md:grid-cols-3 gap-4">
+  <div class="card p-5 md:col-span-1 space-y-4">
+   <div><label class="text-sm font-semibold">Trafik: <span id="trafTxt">150</span> req/detik</label>
+    <input id="traf" type="range" min="0" max="1000" step="10" value="150" class="w-full mt-2"></div>
+   <div><label class="text-sm font-semibold">Tipe instance</label>
+    <select id="type" class="w-full mt-1 p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-transparent">
+     <option value="small" class="text-black">Small – 100 req/s – $0,02/jam</option>
+     <option value="medium" class="text-black">Medium – 250 req/s – $0,05/jam</option>
+     <option value="large" class="text-black">Large – 600 req/s – $0,12/jam</option></select></div>
+   <div class="flex gap-2"><button id="addVm" class="flex-1 bg-emerald-600 text-white rounded-lg py-2 text-sm">+ Launch</button><button id="delVm" class="flex-1 bg-rose-600 text-white rounded-lg py-2 text-sm">− Terminate</button></div>
+   <label class="flex items-center gap-2 text-sm"><input id="auto" type="checkbox"> Auto-scaling (naik &gt;70%, turun &lt;30%)</label>
+   <div class="grid grid-cols-2 gap-2 text-center text-sm">
+    <div class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800">Instance<div id="nVm" class="text-xl font-bold">1</div></div>
+    <div class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800">Biaya total<div id="cost" class="text-xl font-bold">$0,00</div></div>
+   </div>
+   <p class="text-xs text-slate-500">1 detik simulasi = 1 jam penagihan.</p>
+  </div>
+  <div class="md:col-span-2 space-y-4">
+   <div class="card p-5"><div class="flex justify-between text-sm font-semibold mb-2"><span>Load Balancer → Server</span><span id="status" class="px-2 rounded-full">Sehat</span></div><div id="vms" class="space-y-2"></div></div>
+   <div id="log" class="rounded-2xl bg-slate-900 text-emerald-400 font-mono text-xs p-4 h-36 overflow-y-auto"></div>
+  </div>
+ </div>
+ <details class="card p-4 mt-4 text-sm"><summary class="font-semibold cursor-pointer">Tugas praktikum</summary>
+  <ol class="list-decimal ml-5 mt-2 space-y-1"><li>Naikkan trafik ke 800 req/s dengan 1 instance Small. Apa yang terjadi?</li><li>Tambahkan instance manual sampai status Sehat. Catat biayanya.</li><li>Ulangi dengan auto-scaling aktif. Bandingkan jumlah instance dan biaya.</li><li>Turunkan trafik ke 50 req/s. Mengapa elastisitas menghemat biaya?</li></ol></details>
+</section>
+
+<section id="dosen">
+ <h2 class="text-2xl font-bold mb-5">👨‍🏫 Tentang Dosen Pengampu</h2>
+ <div class="card p-6 sm:p-8">
+  <div class="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
+   <div class="w-24 h-24 shrink-0 rounded-full bg-gradient-to-br from-sky-500 to-indigo-600 text-white text-3xl font-bold flex items-center justify-center">LY</div>
+   <div class="text-center sm:text-left">
+    <h3 class="text-xl font-bold">Lazuardi Yudha Pradana, S.Kom., M.Kom.</h3>
+    <p class="mt-2 italic text-slate-600 dark:text-slate-300">“Seorang muslim yang memiliki cita dunia untuk menjadi pengajar ilmu dan pemilik cinta dari keluarga. Tumbuh sejak 1994, pendamping setia sejak 2018, serta dosen &amp; ayah penjaga cinta sejak 2019.”</p>
+   </div>
+  </div>
+  <div class="grid sm:grid-cols-3 gap-3 mt-6 text-sm">
+   <a class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800" href="https://instagram.com/Lazuardiyudha" target="_blank" rel="noopener">📸 Instagram<br><b>Lazuardiyudha</b></a>
+   <a class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800" href="https://wa.me/6281377922669" target="_blank" rel="noopener">💬 WhatsApp<br><b>0813-7792-2669</b></a>
+   <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800">🎮 Mobile Legends ID<br><b>899085688 (12552)</b></div>
+  </div>
+  <h4 class="font-bold mt-6 mb-3">🎓 Riwayat Pengajaran</h4>
+  <ol class="border-l-2 border-sky-500 ml-2 space-y-3 text-sm">
+   <li class="pl-4"><b>2019 – Sekarang</b><br>Dosen Universitas Dinamika Bangsa</li>
+   <li class="pl-4"><b>2020 – Sekarang</b><br>Instruktur Stephen Komputer</li>
+   <li class="pl-4"><b>2021 – Sekarang</b><br>Dosen Universitas Adiwangsa Jambi</li>
+   <li class="pl-4"><b>2022 – 2025</b><br>Dosen UIN STS &amp; Poltekkes Kemenkes Jambi</li>
+  </ol>
+ </div>
+</section>
+</main>
+<footer class="text-center text-xs text-slate-500 py-8">© 2026 CloudLearn • Media pembelajaran Teknologi Berbasis Cloud • Lazuardi Yudha Pradana, S.Kom., M.Kom.</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+/* ===== MODUL ===== */
+const MODS=[
+{t:"Pertemuan 1: Pengantar Cloud",i:"☁️",intro:"Cloud computing = menyewa komputer (server, penyimpanan, aplikasi) lewat internet, seperti menyewa listrik: pakai sesuai kebutuhan, bayar sesuai pemakaian, tanpa membangun pembangkit sendiri.",
+pts:[["Masalah apa yang diselesaikan?","Dulu perusahaan harus membeli server, membangun ruang server, dan menggaji teknisi sebelum bisa meluncurkan aplikasi. Biayanya besar dan kapasitasnya sulit disesuaikan. Cloud memindahkan semua itu ke penyedia (AWS, Azure, Google Cloud) sehingga Anda cukup menyewa."],["Lima karakteristik cloud (NIST)","1) <b>On-demand self-service</b>: pesan sendiri lewat panel web. 2) <b>Broad network access</b>: diakses dari laptop atau ponsel mana pun. 3) <b>Resource pooling</b>: satu mesin fisik dipakai banyak pelanggan, datanya tetap terpisah. 4) <b>Rapid elasticity</b>: kapasitas bisa naik dan turun cepat. 5) <b>Measured service</b>: pemakaian diukur lalu ditagih."],["Kelebihan dan kekurangan","Kelebihan: tanpa investasi hardware awal, cepat dipakai, mudah diperbesar, dan bisa dijangkau global. Kekurangan: butuh koneksi internet, biaya bisa membengkak bila lupa mematikan layanan, dan data berada di pihak ketiga sehingga keamanan harus diatur dengan benar."]],
+ist:[["Server","Komputer yang melayani permintaan komputer lain."],["Data center","Gedung berisi ribuan server milik penyedia cloud."],["Provider","Perusahaan penyedia layanan cloud."]],
+e:"Netflix menyewa kapasitas cloud. Saat serial populer rilis dan jutaan orang menonton, kapasitas bertambah otomatis; setelah sepi, dikurangi. Anda juga memakainya sehari-hari lewat Google Drive.",
+q:`Cloud computing adalah…|penyediaan sumber daya komputasi lewat internet dengan bayar sesuai pemakaian|membeli server fisik sendiri|jaringan LAN kantor|program antivirus
+Memesan server sendiri tanpa menghubungi admin penyedia disebut…|On-demand self-service|Resource pooling|Measured service|Rapid elasticity
+Sumber daya fisik yang dibagi untuk banyak pelanggan sekaligus disebut…|Resource pooling|On-demand self-service|Backup|Failover
+Tagihan berdasarkan pemakaian nyata merupakan karakteristik…|Measured service|Broad network access|Pooling|Virtualisasi
+Kapasitas yang bisa naik dan turun cepat disebut…|Rapid elasticity|Measured service|Self-service|Enkripsi
+Keuntungan cloud bagi startup adalah…|tidak perlu membeli hardware di awal|pasti gratis|tidak perlu internet|tanpa risiko keamanan
+Google Drive adalah contoh…|layanan cloud storage|aplikasi desain offline|sistem operasi|kompiler
+Tiga penyedia cloud besar adalah…|AWS, Azure, Google Cloud|Word, Excel, PowerPoint|Chrome, Firefox, Edge|Windows, Linux, macOS
+Salah satu kekurangan cloud adalah…|bergantung pada koneksi internet|tidak bisa diperbesar|selalu tanpa backup|hanya untuk perusahaan besar
+Lima karakteristik cloud dirumuskan oleh…|NIST|FIFA|WHO|UNESCO`},
+{t:"Pertemuan 2: IaaS, PaaS, SaaS",i:"🧱",intro:"Tiga model layanan menentukan seberapa banyak yang Anda urus sendiri: IaaS (paling banyak), PaaS (sedang), SaaS (hampir tidak ada).",
+pts:[["IaaS – Infrastructure as a Service","Anda menyewa infrastruktur mentah: mesin virtual, penyimpanan, dan jaringan. Anda memasang OS, mengatur software, dan menjaga keamanannya. Cocok untuk administrator yang butuh kontrol penuh. Contoh: AWS EC2, Google Compute Engine."],["PaaS – Platform as a Service","Penyedia menyiapkan OS dan runtime; Anda cukup mengunggah kode dan mengelola data. Cocok untuk developer yang ingin fokus membuat aplikasi. Contoh: Google App Engine, Heroku."],["SaaS – Software as a Service","Aplikasi sudah jadi dan langsung dipakai lewat browser. Anda hanya login dan memakai. Contoh: Gmail, Zoom, Microsoft 365."],["Analogi pizza","IaaS = beli bahan dan masak sendiri di dapur sewaan. PaaS = pizza setengah jadi, Anda yang memanggang. SaaS = pizza diantar siap makan."]],
+ist:[["Runtime","Lingkungan yang menjalankan kode program."],["VM","Komputer virtual di dalam komputer fisik."],["On-premise","Server milik sendiri di gedung sendiri."]],
+e:"Kampus menjalankan sistem akademik di VM sewaan (IaaS), dosen membuat web e-learning di sebuah platform (PaaS), dan mahasiswa menulis tugas di Google Docs (SaaS).",
+q:`Layanan yang menyediakan VM, storage, dan jaringan mentah adalah…|IaaS|PaaS|SaaS|DNS
+Gmail yang dipakai lewat browser termasuk…|SaaS|IaaS|PaaS|VPN
+Platform untuk menjalankan kode tanpa mengurus server adalah…|PaaS|SaaS|IaaS|CDN
+Pada IaaS, sistem operasi dikelola oleh…|pelanggan|penyedia cloud|pengguna akhir|pemerintah
+Contoh IaaS adalah…|AWS EC2|Gmail|Zoom|Google Docs
+Contoh SaaS adalah…|Microsoft 365|AWS EC2|Docker|Kubernetes
+Kontrol terbesar bagi pelanggan ada pada…|IaaS|PaaS|SaaS|semuanya sama
+Beban pengelolaan terkecil bagi pelanggan ada pada…|SaaS|IaaS|PaaS|on-premise
+Developer yang ingin fokus pada kode dan data cocok memakai…|PaaS|IaaS|SaaS|colocation
+Pada analogi pizza, pizza diantar siap makan adalah…|SaaS|PaaS|IaaS|on-premise`},
+{t:"Pertemuan 3: Model Deployment",i:"🏢",intro:"Model deployment menjawab pertanyaan: cloud itu dimiliki siapa dan dipakai oleh siapa?",
+pts:[["Public cloud","Dimiliki penyedia dan dipakai banyak pelanggan lewat internet. Murah, cepat, tanpa perawatan hardware. Contoh: AWS, Azure, Google Cloud."],["Private cloud","Dibangun khusus untuk satu organisasi, di gedung sendiri atau disewa khusus. Kontrol dan keamanan lebih tinggi, tetapi biaya dan perawatan lebih besar."],["Hybrid dan Community","Hybrid menggabungkan private dan public: data penting di private, beban lonjakan di public. Community dipakai bersama beberapa organisasi dengan kebutuhan sama, misalnya beberapa universitas untuk riset."],["Cara memilih","Pertimbangkan biaya, aturan perlindungan data (regulasi), kebutuhan performa, dan kemampuan tim IT."]],
+ist:[["Regulasi","Aturan hukum, misalnya perlindungan data pribadi."],["Latensi","Waktu tunda respons."],["Vendor lock-in","Sulit pindah karena terikat satu penyedia."]],
+e:"Bank menyimpan data nasabah di private cloud, sedangkan situs promo memakai public cloud agar kuat menghadapi lonjakan pengunjung.",
+q:`Cloud yang dikelola penyedia dan dipakai banyak pelanggan disebut…|public cloud|private cloud|hybrid cloud|community cloud
+Cloud yang khusus untuk satu organisasi disebut…|private cloud|public cloud|community cloud|edge cloud
+Gabungan private dan public cloud disebut…|hybrid cloud|community cloud|public cloud|local cloud
+Cloud yang dibagi beberapa organisasi berkebutuhan serupa disebut…|community cloud|public cloud|private cloud|hybrid cloud
+Data yang sangat sensitif lebih cocok di…|private cloud|public cloud tanpa pengaman|flashdisk umum|media sosial
+Contoh public cloud adalah…|Microsoft Azure|server lab pribadi|hardisk eksternal|router rumah
+Keuntungan utama public cloud adalah…|murah dan cepat dipakai|kontrol fisik penuh|tidak perlu internet|gratis selamanya
+Faktor memilih model deployment adalah…|biaya, regulasi data, kebutuhan performa|warna logo|merek laptop|jumlah pengikut media sosial
+Bank: data nasabah di private, web promo di public. Modelnya…|hybrid|public murni|community|tidak ada
+Kelemahan private cloud biasanya…|biaya dan pengelolaan lebih besar|tidak bisa dipakai|harus gratis|tidak punya server`},
+{t:"Pertemuan 4: Virtualisasi dan Container",i:"📦",intro:"Virtualisasi memungkinkan satu komputer fisik bertindak seperti banyak komputer. Container adalah cara yang lebih ringan lagi.",
+pts:[["Virtualisasi","Hypervisor (misal VMware, KVM, Hyper-V) membagi CPU, RAM, dan disk satu server menjadi beberapa mesin virtual (VM). Tiap VM punya OS sendiri dan terisolasi dari yang lain. Inilah dasar cloud: server fisik tidak menganggur."],["Container","Container (misal Docker) membungkus aplikasi beserta kebutuhannya, tetapi berbagi kernel OS dengan host. Karena tanpa OS penuh, ukurannya kecil dan startnya hitungan detik."],["Orkestrasi","Kubernetes mengatur ribuan container: menjalankan, memulihkan yang gagal, dan menambah jumlahnya otomatis."],["Analogi","VM seperti apartemen lengkap dengan dapur sendiri; container seperti kamar kos yang berbagi dapur: lebih hemat tempat."]],
+ist:[["Kernel","Inti sistem operasi."],["Image","Cetakan untuk membuat VM atau container."],["Host","Mesin fisik tempat VM atau container berjalan."]],
+e:"Aplikasi web kampus berjalan dalam 10 container di satu server. Saat pendaftaran mahasiswa baru ramai, Kubernetes menambahnya menjadi 40 container dalam hitungan detik.",
+q:`Perangkat lunak yang membagi server fisik menjadi banyak VM adalah…|hypervisor|browser|kompiler|router
+Setiap VM memiliki…|sistem operasi sendiri|hanya aplikasi tanpa OS|tanpa memori|tanpa jaringan
+Container berbagi…|kernel host|seluruh OS tamu|hardisk fisik|monitor
+Yang lebih ringan adalah…|container|VM|keduanya sama|server fisik
+Contoh platform container adalah…|Docker|Excel|Photoshop|Notepad
+Orkestrator container yang populer adalah…|Kubernetes|hypervisor|DNS|SQL
+Keunggulan virtualisasi adalah…|satu server fisik dimanfaatkan lebih efisien|tidak butuh listrik|server menjadi lebih kecil secara fisik|tanpa OS
+Isolasi yang lebih kuat umumnya dimiliki…|VM|container|keduanya sama|tidak ada
+Container biasanya mulai berjalan dalam…|hitungan detik|hitungan hari|hitungan bulan|tidak bisa dijalankan
+Contoh hypervisor adalah…|VMware ESXi|Docker Hub|Gmail|Canva`},
+{t:"Pertemuan 5: Skalabilitas dan Load Balancing",i:"⚖️",intro:"Skalabilitas = kemampuan sistem melayani pengguna yang makin banyak. Load balancer memastikan beban terbagi rata.",
+pts:[["Vertikal vs horizontal","Vertical scaling: memperkuat satu server (tambah CPU/RAM), tetapi ada batas maksimum dan biasanya perlu restart. Horizontal scaling: menambah jumlah server sehingga hampir tanpa batas."],["Elasticity dan auto-scaling","Elasticity berarti kapasitas bertambah saat ramai dan berkurang saat sepi, otomatis berdasarkan aturan, misalnya tambah server jika CPU di atas 70%."],["Load balancer","Berdiri di depan server, membagi permintaan secara adil, dan melakukan health check. Bila satu server mati, trafik dialihkan ke server yang sehat sehingga layanan tetap hidup."]],
+ist:[["Beban (load)","Seberapa sibuk server."],["Health check","Pengecekan berkala apakah server hidup."],["Failover","Perpindahan otomatis ke server cadangan."]],
+e:"Saat Harbolnas, marketplace menambah ratusan server dalam hitungan menit, lalu menguranginya setelah promo selesai sehingga biaya tidak terbuang.",
+q:`Menambah CPU/RAM pada satu server disebut…|vertical scaling|horizontal scaling|elasticity|caching
+Menambah jumlah server disebut…|horizontal scaling|vertical scaling|downgrade|backup
+Kapasitas yang naik-turun otomatis mengikuti beban disebut…|elasticity|enkripsi|DNS|kompresi
+Komponen pembagi permintaan ke banyak server adalah…|load balancer|database|firewall|kompiler
+Health check bertujuan…|mengecek apakah server hidup|mengecek tagihan|mengganti OS|menghapus data
+Bila satu server mati, load balancer akan…|mengalihkan trafik ke server sehat|mematikan semua server|menghapus data|menaikkan harga
+Auto-scaling in artinya…|mengurangi server saat beban turun|menambah server|mematikan internet|menghapus akun
+Manfaat auto-scaling saat promo adalah…|layanan lancar dan biaya efisien|semua gratis|server tak butuh listrik|tak perlu internet
+Skalabilitas vertikal terbatas karena…|satu mesin punya kapasitas maksimum|dilarang hukum|hanya ada di Linux|tidak bisa diukur
+CPU 95% terus-menerus menandakan…|perlu menambah kapasitas|server terlalu santai|kondisi aman|internet putus`},
+{t:"Pertemuan 6: Keamanan dan Biaya",i:"🔐",intro:"Keamanan cloud adalah tanggung jawab bersama, dan biaya cloud harus dipantau karena dibayar per pemakaian.",
+pts:[["Shared responsibility model","Penyedia mengamankan gedung, listrik, dan perangkat fisik. Pelanggan mengamankan akun, data, dan konfigurasi. Kebocoran data paling sering akibat salah konfigurasi pelanggan."],["Praktik keamanan dasar","Gunakan MFA (verifikasi dua langkah), least privilege (beri hak akses seminimal perlu), enkripsi data, password kuat, dan backup rutin."],["Mengelola biaya","Pay-as-you-go: bayar sesuai pemakaian. Matikan resource yang tidak dipakai, gunakan auto-scaling, pakai reserved instance untuk beban stabil, dan pasang peringatan anggaran."]],
+ist:[["MFA","Login dengan dua bukti identitas, misal password dan kode OTP."],["Enkripsi","Mengacak data agar tak terbaca tanpa kunci."],["IAM","Pengaturan siapa boleh mengakses apa."]],
+e:"Sebuah perusahaan membocorkan data pelanggan karena bucket penyimpanan tidak sengaja dibuat publik. Itu kesalahan konfigurasi pelanggan, bukan kegagalan penyedia cloud.",
+q:`Pembagian tugas keamanan antara penyedia dan pelanggan disebut…|shared responsibility model|pay-per-use|hybrid cloud|load balancing
+Yang diamankan oleh pelanggan adalah…|data, akun, dan konfigurasi|gedung data center|kabel fisik penyedia|listrik penyedia
+Hak akses seminimal yang diperlukan disebut…|least privilege|full access|open access|root untuk semua
+Login dengan lapisan tambahan seperti kode OTP disebut…|MFA|DNS|CDN|VPN
+Bucket yang tidak sengaja publik adalah…|kesalahan konfigurasi pelanggan|kegagalan listrik penyedia|gempa bumi|virus pada kabel
+Mengacak data agar tak terbaca tanpa kunci disebut…|enkripsi|kompresi|defragmentasi|streaming
+Pay-as-you-go artinya…|bayar sesuai pemakaian|bayar di muka seumur hidup|gratis|bayar sekali
+Cara menghemat biaya cloud adalah…|mematikan resource yang tidak terpakai|membiarkan semua server menyala|membeli server lebih besar|menghapus monitoring
+Salinan data untuk pemulihan disebut…|backup|cache|cookie|patch
+Reserved instance cocok untuk…|beban stabil jangka panjang|beban sekali pakai|tanpa beban|uji coba satu menit`},{t:"Pertemuan 7: Penyimpanan dan Database Cloud",i:"🗄️",intro:"Data adalah aset utama aplikasi. Cloud menyediakan beberapa jenis penyimpanan dan database; memilih yang tepat menentukan kecepatan, biaya, dan keamanan data.",
+pts:[["Tiga jenis penyimpanan","<b>Object storage</b> (Amazon S3, Google Cloud Storage) menyimpan file sebagai objek dengan alamat URL; murah, hampir tak terbatas, cocok untuk foto, video, dan backup. <b>Block storage</b> (EBS) bekerja seperti hardisk yang dipasang ke VM; cepat, cocok untuk OS dan database. <b>File storage</b> (NFS, EFS) berbagi folder ke banyak server sekaligus."],["Database relasional vs NoSQL","Relasional (MySQL, PostgreSQL) memakai tabel, relasi, dan SQL; menjamin konsistensi lewat ACID sehingga cocok untuk transaksi keuangan dan akademik. NoSQL (MongoDB, Firestore, DynamoDB) fleksibel tanpa skema kaku dan mudah diskalakan horizontal; cocok untuk data besar, katalog produk, dan log."],["Managed database, replikasi, dan backup","Pada managed database (Cloud SQL, Amazon RDS) penyedia mengurus instalasi, patch, dan backup otomatis. Replikasi menyalin data ke beberapa server atau zona: read replica meringankan beban baca, replika lintas zona menjaga data bila satu lokasi gagal. Selalu terapkan backup berkala dan uji pemulihannya."]],
+ist:[["ACID","Atomicity, Consistency, Isolation, Durability: jaminan transaksi andal."],["Replikasi","Menyalin data ke beberapa node untuk ketersediaan."],["Bucket","Wadah objek di object storage."]],
+e:"Aplikasi e-commerce menyimpan foto produk di object storage, data pesanan di database relasional, dan keranjang belanja sementara di NoSQL yang cepat.",
+q:`Penyimpanan cloud untuk file seperti foto dan video adalah…|object storage|block storage|register CPU|BIOS
+Database yang menjamin transaksi dengan prinsip ACID adalah…|relasional|selalu NoSQL|spreadsheet lokal|cache browser
+Disk yang dipasang ke VM seperti hardisk disebut…|block storage|object storage|CDN|DNS
+Keuntungan managed database adalah…|patch dan backup diurus penyedia|tak perlu internet|tak ada biaya|tak perlu password
+Replikasi lintas zona berguna untuk…|menjaga data bila satu lokasi gagal|menghapus data lama|memperlambat sistem|mengganti OS`},
+{t:"Pertemuan 8: Jaringan Cloud dan CDN",i:"🌐",intro:"Semua layanan cloud saling terhubung lewat jaringan. Memahami jaringan virtual, DNS, dan CDN membantu merancang aplikasi yang cepat dan aman.",
+pts:[["Jaringan virtual (VPC)","VPC adalah jaringan pribadi yang Anda bentuk di dalam cloud penyedia. Anda menentukan rentang IP (misal 10.0.0.0/16) lalu membaginya menjadi subnet. Subnet publik berisi server yang boleh diakses internet (web), subnet privat berisi server yang disembunyikan (database)."],["Pengamanan lalu lintas","Security group dan firewall bertindak sebagai satpam: hanya port tertentu yang dibuka (misal 443 untuk HTTPS). Akses administrasi dilakukan lewat VPN atau bastion host. Prinsipnya: tutup semua, buka seperlunya."],["DNS dan CDN","DNS menerjemahkan nama domain menjadi alamat IP. CDN menyalin konten statis ke server tepi (edge) di banyak kota; pengguna di Jambi mengambil gambar dari lokasi terdekat sehingga latensi turun dan server asal tidak kewalahan. CDN juga membantu meredam serangan DDoS."]],
+ist:[["CIDR","Format penulisan rentang IP, misal 10.0.0.0/16."],["Edge location","Server tepi CDN dekat pengguna."],["DDoS","Serangan membanjiri server dengan permintaan palsu."]],
+e:"Portal berita nasional memakai CDN sehingga pembaca di Sumatra dan Papua sama-sama memuat gambar dari server terdekat, bukan dari satu server di Jakarta.",
+q:`VPC adalah…|jaringan privat virtual di cloud|aplikasi kasir|jenis database|kabel fiber
+Server database sebaiknya ditempatkan di…|subnet privat|subnet publik tanpa firewall|folder download|ponsel
+Fungsi utama CDN adalah…|menyajikan konten dari lokasi terdekat|menghapus virus|menyimpan password|mengompilasi kode
+DNS bertugas…|menerjemahkan domain menjadi alamat IP|mengenkripsi disk|membuat backup|menghitung biaya
+Port yang lazim untuk HTTPS adalah…|443|21|3389|1`},
+{t:"Pertemuan 9: Serverless dan Microservices",i:"⚡",intro:"Arsitektur modern memecah aplikasi menjadi bagian kecil yang mandiri, bahkan menjalankan kode tanpa mengurus server sama sekali.",
+pts:[["Monolit vs microservices","Aplikasi monolit menyatukan semua fitur dalam satu kode: sederhana di awal, tetapi satu bug dapat menjatuhkan semuanya dan sulit diskalakan sebagian. Microservices memecahnya menjadi layanan kecil (pembayaran, katalog, notifikasi) yang berkomunikasi lewat API, bisa dikembangkan dan diskalakan sendiri-sendiri."],["Serverless dan FaaS","Pada Function as a Service (AWS Lambda, Google Cloud Functions) Anda hanya menulis fungsi; penyedia menjalankannya saat ada pemicu (event) seperti unggahan file atau permintaan HTTP, lalu membebankan biaya per eksekusi. Tidak ada server menganggur, tetapi ada cold start (jeda saat fungsi pertama kali dijalankan) dan batas waktu eksekusi."],["API Gateway dan event-driven","API Gateway menjadi pintu depan: memeriksa autentikasi, membatasi laju permintaan, lalu meneruskan ke layanan yang tepat. Antrean pesan (Pub/Sub, SQS) membuat layanan saling terhubung secara longgar sehingga lonjakan beban tertampung."]],
+ist:[["API","Antarmuka agar program saling berkomunikasi."],["Cold start","Jeda awal saat fungsi dijalankan setelah lama tak aktif."],["Event","Kejadian pemicu, misal unggah file."]],
+e:"Saat mahasiswa mengunggah foto KTM, sebuah fungsi serverless otomatis mengecilkan ukuran foto dan menyimpannya. Tidak ada server yang menyala menunggu unggahan.",
+q:`FaaS adalah singkatan dari…|Function as a Service|File as a Server|Fast as a Service|Format as a Script
+Keunggulan serverless adalah…|bayar per eksekusi tanpa mengurus server|tidak ada kode|tanpa internet|selalu gratis
+Jeda saat fungsi pertama dijalankan disebut…|cold start|failover|backup|latency tetap
+Arsitektur yang memecah aplikasi menjadi layanan kecil disebut…|microservices|monolit|mainframe|spreadsheet
+API Gateway berfungsi sebagai…|pintu depan permintaan ke layanan|pengganti database|antivirus|printer`},
+{t:"Pertemuan 10: DevOps dan CI/CD",i:"🔁",intro:"DevOps menyatukan pengembangan (Dev) dan operasional (Ops) agar rilis aplikasi cepat, sering, dan minim kesalahan, dengan bantuan otomatisasi cloud.",
+pts:[["Budaya dan siklus DevOps","Alurnya berulang: rencana, kode, build, uji, rilis, deploy, operasi, monitor. Tim developer dan operasional berbagi tanggung jawab dan memakai otomatisasi sehingga tidak ada lagi 'di laptop saya jalan, di server tidak'."],["CI/CD pipeline","Continuous Integration: setiap kode yang diunggah ke repositori (Git) langsung di-build dan diuji otomatis. Continuous Delivery/Deployment: hasil yang lolos uji otomatis dikirim ke server. Contoh alat: GitHub Actions, GitLab CI, Jenkins."],["Infrastructure as Code (IaC)","Infrastruktur ditulis sebagai kode (Terraform, CloudFormation) sehingga server, jaringan, dan database dapat dibuat ulang identik hanya dengan satu perintah, tersimpan versinya, dan mudah di-review. Strategi rilis seperti blue-green dan canary menekan risiko saat deploy."]],
+ist:[["Repositori","Tempat menyimpan dan melacak versi kode."],["Pipeline","Rangkaian tahap otomatis build, uji, deploy."],["Rollback","Kembali ke versi sebelumnya bila rilis bermasalah."]],
+e:"Setiap dosen mengunggah perbaikan ke Git, pipeline menguji lalu men-deploy sistem akademik di malam hari tanpa perlu admin menyalin file manual.",
+q:`CI/CD bertujuan…|mengotomatiskan build, uji, dan rilis|mengganti sistem operasi|menghapus bug otomatis selamanya|mengganti developer
+Contoh alat CI/CD adalah…|GitHub Actions|Paint|Notepad|Calculator
+IaC berarti…|infrastruktur dikelola dengan kode|internet as a cable|ISP as a Company|ide as code
+Kembali ke versi sebelumnya disebut…|rollback|rebuild|reboot saja|restore
+Git digunakan untuk…|mengelola versi kode|menggambar diagram|merekam layar|mengirim email`},
+{t:"Pertemuan 11: Monitoring, High Availability, dan Disaster Recovery",i:"🛟",intro:"Sistem cloud harus terus hidup. Pertemuan ini membahas cara memantau kesehatan sistem dan memulihkannya bila terjadi bencana.",
+pts:[["Monitoring dan logging","Metrik (CPU, RAM, latensi, jumlah error) dikumpulkan dan ditampilkan di dashboard (CloudWatch, Grafana). Log mencatat kejadian rinci untuk penelusuran. Alert mengirim peringatan ke tim saat ambang batas terlewati sebelum pengguna mengeluh."],["High Availability (HA)","Ketersediaan diukur dalam persen: 99,9% berarti downtime maksimum sekitar 8,8 jam per tahun, 99,99% sekitar 52 menit. HA dicapai dengan menghapus single point of failure: banyak server, beberapa Availability Zone, load balancer, dan database berreplikasi."],["Disaster Recovery (DR)","Dua ukuran utama: <b>RPO</b> (berapa data maksimum yang boleh hilang, misal 15 menit) dan <b>RTO</b> (berapa lama layanan boleh mati sebelum pulih). Strateginya: backup and restore (murah, lambat), pilot light, warm standby, hingga multi-site aktif-aktif (mahal, hampir tanpa downtime)."]],
+ist:[["SLA","Perjanjian tingkat layanan, misal ketersediaan 99,9%."],["RPO","Batas data yang boleh hilang."],["RTO","Batas waktu pemulihan."]],
+e:"Bank daring menjaga dua region yang saling mencadangkan. Saat satu data center terkena gangguan listrik, layanan dialihkan dalam hitungan menit sehingga nasabah nyaris tak terganggu.",
+q:`RTO adalah…|batas waktu pemulihan layanan|batas data hilang|jumlah server|harga langganan
+RPO adalah…|batas data yang boleh hilang|waktu pemulihan|jumlah pengguna|jenis VM
+Single point of failure adalah…|satu komponen yang bila gagal menjatuhkan sistem|server tercepat|backup terbaik|fitur DNS
+Ketersediaan 99,99% lebih baik dari…|99,9%|100,1%|999%|semua salah
+Dashboard monitoring dipakai untuk…|memantau metrik kesehatan sistem|menggambar logo|mengetik laporan|mengganti OS`},
+{t:"Pertemuan 12: Migrasi ke Cloud dan Multi-Cloud",i:"🚚",intro:"Memindahkan sistem lama ke cloud butuh perencanaan: apa yang dipindah, bagaimana caranya, dan bagaimana menghindari ketergantungan pada satu penyedia.",
+pts:[["Tahapan migrasi","1) Penilaian: inventarisasi aplikasi, data, dan ketergantungannya. 2) Perencanaan: pilih strategi, jadwal, dan estimasi biaya (TCO). 3) Pemindahan: uji coba dulu pada sistem kecil. 4) Validasi dan optimasi: bandingkan performa, tutup sistem lama."],["Strategi 6R","<b>Rehost</b> (lift and shift, pindah apa adanya), <b>Replatform</b> (sedikit penyesuaian, misal ke managed database), <b>Refactor</b> (tulis ulang agar cloud-native), <b>Repurchase</b> (ganti dengan SaaS), <b>Retire</b> (hentikan yang tak terpakai), <b>Retain</b> (tetap di tempat lama)."],["Multi-cloud dan vendor lock-in","Multi-cloud memakai lebih dari satu penyedia untuk mengurangi ketergantungan dan menjaga ketersediaan. Risikonya: kompleksitas dan keahlian ganda. Kurangi lock-in dengan container, standar terbuka, dan data yang mudah diekspor."]],
+ist:[["TCO","Total Cost of Ownership: seluruh biaya kepemilikan."],["Lift and shift","Memindahkan sistem tanpa mengubah."],["Cloud-native","Aplikasi dirancang khusus untuk cloud."]],
+e:"Sebuah pemda memindahkan aplikasi surat-menyurat ke cloud lewat rehost lebih dulu agar cepat, baru kemudian merombak modul yang paling sering bermasalah.",
+q:`Lift and shift dikenal juga sebagai…|rehost|refactor|retire|repurchase
+Menulis ulang aplikasi agar cloud-native disebut…|refactor|retain|rehost|retire
+Risiko memakai satu penyedia saja adalah…|vendor lock-in|gratis|tanpa biaya|selalu cepat
+TCO berarti…|total biaya kepemilikan|total CPU online|tipe cloud open|tarif cloud oke
+Tahap pertama migrasi adalah…|penilaian inventaris aplikasi|mematikan semua server|membeli hardware|menghapus data`},
+{t:"Pertemuan 13: Tata Kelola, Kepatuhan, dan FinOps",i:"⚖️",intro:"Cloud yang aman dan efisien perlu aturan: siapa boleh apa, data disimpan di mana secara hukum, dan bagaimana biaya dikendalikan.",
+pts:[["Tata kelola dan IAM","Kebijakan akses diatur lewat IAM: peran (role) diberikan ke grup, bukan ke orang per orang, dan ditinjau berkala. Tagging resource (misal proyek=SIAKAD) memudahkan pelacakan pemilik dan biaya. Audit log mencatat siapa mengubah apa."],["Kepatuhan dan kedaulatan data","Di Indonesia, data pribadi diatur UU Pelindungan Data Pribadi (UU PDP, 2022) yang mewajibkan keamanan data dan pelaporan kebocoran. Standar umum: ISO 27001 dan SOC 2. Kedaulatan data menyangkut lokasi penyimpanan; pilih region sesuai aturan, misal region Jakarta."],["FinOps","FinOps adalah disiplin mengendalikan biaya cloud bersama: ukur pemakaian (visibilitas), optimalkan (right-sizing, matikan resource menganggur, reserved/spot), lalu kelola lewat anggaran dan alert. Tujuannya nilai bisnis terbaik per rupiah, bukan sekadar biaya termurah."]],
+ist:[["UU PDP","Undang-undang perlindungan data pribadi di Indonesia."],["Right-sizing","Menyesuaikan ukuran server dengan kebutuhan nyata."],["Audit log","Catatan jejak aktivitas akun."]],
+e:"Universitas menandai (tagging) seluruh resource per fakultas. Laporan bulanan menunjukkan server uji yang lupa dimatikan sehingga biaya turun tanpa mengganggu layanan.",
+q:`UU yang mengatur pelindungan data pribadi di Indonesia adalah…|UU PDP|UU Lalu Lintas|UU Pertanian|UU Pemilu
+FinOps bertujuan…|mengendalikan dan mengoptimalkan biaya cloud|menghapus cloud|membuat gim|mengganti dosen
+Right-sizing berarti…|menyesuaikan ukuran resource dengan kebutuhan|memperbesar semua server|menghapus backup|membeli lisensi ulang
+Tagging resource berguna untuk…|melacak pemilik dan biaya|mengenkripsi data|mempercepat internet|mengompilasi kode
+Standar manajemen keamanan informasi yang umum adalah…|ISO 27001|ISO kamera|ISO foto|ISO musik`},
+{t:"Pertemuan 14: Tren Cloud dan Proyek Akhir",i:"🚀",intro:"Pertemuan penutup merangkum perjalanan belajar dan melihat arah masa depan cloud: edge, AI, dan cloud berkelanjutan.",
+pts:[["Edge dan Internet of Things","Edge computing memproses data dekat sumbernya (kamera, sensor) sehingga latensi sangat rendah dan bandwidth hemat; cloud pusat dipakai untuk analisis dan penyimpanan jangka panjang. Cocok untuk pertanian cerdas, pabrik, dan kota pintar."],["AI dan Machine Learning di cloud","Cloud menyediakan GPU sewaan dan layanan siap pakai (penerjemahan, pengenalan gambar, model bahasa) lewat API sehingga organisasi kecil dapat memakai AI tanpa membeli perangkat mahal. Tantangannya: biaya pelatihan, privasi data, dan bias model."],["Green cloud dan arah karier","Data center besar memakai energi sangat besar; penyedia kini mengejar energi terbarukan dan efisiensi pendingin. Praktik hemat resource ikut menurunkan jejak karbon. Karier terkait: cloud engineer, DevOps engineer, cloud security, data engineer, dan FinOps analyst."]],
+ist:[["Edge computing","Pemrosesan di dekat sumber data."],["GPU","Prosesor paralel untuk pelatihan AI."],["Jejak karbon","Emisi karbon akibat aktivitas."]],
+e:"Kebun sawit memasang sensor kelembapan tanah yang diproses di edge. Hanya ringkasan data dikirim ke cloud untuk dianalisis, sehingga hemat kuota dan tetap bisa bekerja saat sinyal lemah.",
+q:`Pemrosesan data dekat sumbernya disebut…|edge computing|cold storage|multi-tenant|virtual disk
+GPU di cloud banyak dipakai untuk…|pelatihan AI|mengetik dokumen|memutar radio|mencetak
+Green cloud berfokus pada…|efisiensi energi dan jejak karbon yang rendah|warna hijau antarmuka|harga termurah|server tanpa listrik
+Salah satu profesi terkait cloud adalah…|cloud engineer|juru parkir|barista|penjahit
+Tantangan AI di cloud meliputi…|biaya, privasi data, dan bias model|tidak ada tantangan|selalu gratis|tanpa internet`}];
+const CS=[
+["Kampus membangun lab daring","Sebuah kampus di Jambi ingin menyediakan sistem ujian online untuk 3.000 mahasiswa, tetapi anggaran server fisik terbatas dan ujian hanya berlangsung 2 minggu per semester.",["Mengapa membeli server fisik kurang efisien?","Karakteristik cloud mana yang paling membantu?"]],
+["Toko UMKM Batik Jambi","Pemilik toko batik butuh website katalog, aplikasi kasir, dan surel kantor. Ia tidak punya tim IT.",["Layanan apa yang dipilih: IaaS, PaaS, atau SaaS untuk tiap kebutuhan?","Apa risikonya bila hanya memakai SaaS?"]],
+["Rumah sakit daerah","RS ingin memakai cloud untuk aplikasi antrean pasien, tetapi rekam medis harus sangat dirahasiakan.",["Model deployment apa yang paling cocok?","Bagian sistem mana yang boleh di public cloud?"]],
+["Migrasi server fisik ke container","Aplikasi pendaftaran mahasiswa baru berjalan di 1 server besar dan sering lambat tiap bulan Agustus.",["Apa keuntungan memindahkannya ke container?","Mengapa orkestrasi Kubernetes diperlukan?"]],
+["Marketplace menghadapi promo 12.12","Trafik naik 10 kali lipat dalam 1 jam, lalu turun cepat setelah tengah malam.",["Pilih scaling vertikal atau horizontal? Jelaskan.","Aturan auto-scaling apa yang masuk akal?"]],
+["Kebocoran data bucket publik","Bucket berisi data pelanggan tak sengaja dibuat publik oleh staf magang selama tiga hari.",["Siapa yang bertanggung jawab menurut shared responsibility?","Tiga langkah pencegahan apa yang diusulkan?"]],
+["Arsip dan transaksi toko online","Toko online menyimpan jutaan foto produk dan data pesanan yang harus akurat sampai rupiah terakhir.",["Jenis penyimpanan apa untuk foto, dan database apa untuk pesanan?","Mengapa perlu replikasi dan backup?"]],
+["Portal berita lambat di luar Jawa","Pembaca di Sumatra dan Kalimantan mengeluh gambar lama dimuat karena server hanya di Jakarta.",["Bagaimana CDN menyelesaikannya?","Bagaimana pengaturan subnet agar database tetap aman?"]],
+["Pendaftaran event kampus","Pendaftaran event ramai hanya 3 hari per bulan. Server selalu menyala sepanjang bulan sehingga boros.",["Bagaimana serverless menghemat biaya?","Apa kekurangannya (cold start, batas waktu)?"]],
+["Rilis sistem akademik","Rilis manual tiap semester sering gagal dan membuat sistem mati semalaman.",["Bagaimana CI/CD mengubah proses ini?","Apa fungsi rollback dan blue-green deployment?"]],
+["Gangguan data center","Layanan perbankan mini sebuah koperasi mati 6 jam akibat listrik padam di satu lokasi.",["Rancang HA agar tidak ada single point of failure.","Tentukan RPO dan RTO yang wajar untuk koperasi."]],
+["Pemda memindahkan 40 aplikasi","Sebuah pemda punya 40 aplikasi lama dan hanya 6 bulan untuk migrasi.",["Aplikasi mana yang di-rehost, di-retire, atau diganti SaaS?","Bagaimana menekan risiko vendor lock-in?"]],
+["Audit biaya dan kepatuhan","Tagihan cloud universitas naik 60% dan auditor menanyakan lokasi data pribadi mahasiswa.",["Langkah FinOps apa yang pertama diambil?","Bagaimana memenuhi UU PDP terkait lokasi dan keamanan data?"]],
+["Proyek akhir: Cloud untuk UMKM Jambi","Rancang solusi cloud untuk UMKM pilihan Anda yang meliputi model layanan, deployment, jaringan, penyimpanan, keamanan, biaya, dan rencana DR.",["Buat diagram arsitektur dan estimasi biaya bulanan.","Presentasikan risiko dan strategi mitigasinya."]]];
+MODS.forEach((m,i)=>m.cs=CS[i]);
+let cur=0,nm="";const done=new Set();
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+const BTN="px-3 py-1 rounded-lg border border-slate-400 text-sm";
+function renderTabs(){$("#modTabs").innerHTML=MODS.map((m,i)=>`<button data-i="${i}" class="shrink-0 px-3 py-2 rounded-full text-sm border ${i==cur?'bg-sky-600 text-white border-sky-600':'border-slate-300 dark:border-slate-700'}">${done.has(i)?'✅':m.i} P${i+1}</button>`).join("");
+ document.querySelectorAll("#modTabs button").forEach(b=>b.onclick=()=>{cur=+b.dataset.i;renderMod()})}
+function renderMod(){const m=MODS[cur];
+ $("#modBody").innerHTML=`<h3 class="text-xl font-bold mb-3">${m.i} ${m.t}</h3>
+ <div class="p-4 rounded-xl bg-sky-50 dark:bg-sky-950 mb-3 text-sm"><b>Intinya:</b> ${m.intro}</div>
+ ${m.pts.map(p=>`<h4 class="font-bold mt-4 mb-1">${p[0]}</h4><p class="leading-relaxed">${p[1]}</p>`).join("")}
+ <h4 class="font-bold mt-5 mb-2">📖 Istilah penting</h4><dl class="grid sm:grid-cols-3 gap-2 text-sm">${m.ist.map(x=>`<div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800"><dt class="font-semibold">${x[0]}</dt><dd>${x[1]}</dd></div>`).join("")}</dl>
+ <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-900 dark:text-amber-100 my-4 text-sm"><b>💡 Contoh dunia nyata:</b> ${m.e}</div>
+ <div class="p-4 rounded-xl bg-violet-50 dark:bg-violet-950 border border-violet-400 mb-4 text-sm"><h4 class="font-bold mb-1">🔎 Studi Kasus: ${m.cs[0]}</h4><p class="mb-2">${m.cs[1]}</p><p class="font-semibold">Diskusikan:</p><ol class="list-decimal ml-5">${m.cs[2].map(x=>`<li>${x}</li>`).join("")}</ol></div>
+ <div class="p-4 rounded-xl border border-emerald-500 mb-4"><h4 class="font-bold mb-1">🧪 Praktikum Interaktif (Canvas)</h4><p class="text-sm mb-3 text-slate-600 dark:text-slate-300">${PR[cur].d}</p><div id="sim"></div></div>
+ <div class="p-4 rounded-xl border border-indigo-500 mb-5"><h4 class="font-bold mb-2">📝 Kuis Pertemuan (${m.q.trim().split("\n").length} soal)</h4><div id="qz"></div></div>
+ <div class="flex justify-between gap-2"><button id="prev" class="border border-slate-400 px-3 py-2 rounded-lg text-sm" ${cur==0?'disabled style="opacity:.4"':''}>← Sebelumnya</button>
+ <button id="mark" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-sm">${done.has(cur)?'Batalkan selesai':'Tandai selesai'}</button>
+ <button id="next" class="border border-slate-400 px-3 py-2 rounded-lg text-sm" ${cur==MODS.length-1?'disabled style="opacity:.4"':''}>Berikutnya →</button></div>`;
+ $("#prev").onclick=()=>{if(cur>0){cur--;renderMod()}};$("#next").onclick=()=>{if(cur<MODS.length-1){cur++;renderMod()}};
+ $("#mark").onclick=()=>{done.has(cur)?done.delete(cur):done.add(cur);renderMod()};
+ renderTabs();$("#progTxt").textContent=done.size+"/"+MODS.length;$("#progBar").style.width=(done.size/MODS.length*100)+"%";
+ PR[cur].f($("#sim"));quiz()}
+
+
+const bx=(g,x,y,w,h,c,t)=>{g.fillStyle=c;g.fillRect(x,y,w,h);if(t){g.fillStyle="#fff";g.font="bold 12px system-ui";g.textAlign="center";g.fillText(t,x+w/2,y+h/2+4);g.textAlign="left";g.font="12px system-ui"}};
+const tx=(g,s,x,y,c)=>{g.fillStyle=c;g.fillText(s,x,y)};
+const dot=(g,x,y,r,c)=>{g.fillStyle=c;g.beginPath();g.arc(x,y,r,0,7);g.fill()};
+function CV(b,o){const dk=matchMedia("(prefers-color-scheme:dark)").matches,C={fg:dk?"#e2e8f0":"#0f172a",bg:dk?"#0f172a":"#f1f5f9",ok:"#10b981",bad:"#e11d48",warn:"#f59e0b",bl:"#0284c7",mu:"#94a3b8"},S={t:0};
+b.innerHTML=`<canvas class="rounded-xl" style="width:100%;height:260px"></canvas><div class="ct flex flex-wrap gap-4 items-center mt-3 text-sm"></div><p class="inf text-sm mt-2 font-semibold"></p>`;
+const c=b.querySelector("canvas"),g=c.getContext("2d"),ct=b.querySelector(".ct"),inf=b.querySelector(".inf");c.width=b.clientWidth||600;c.height=260;
+o.c.forEach(([id,ty,l,mn,mx,v])=>{S[id]=v;const e=document.createElement("label");e.className="flex items-center gap-2";
+ if(ty=="b"){e.innerHTML=`<button class="${BTN}">${l}</button>`;e.firstChild.onclick=()=>o.a(id,S)}
+ else if(ty=="k"){e.innerHTML=`<input type=checkbox> ${l}`;e.firstChild.onchange=x=>S[id]=x.target.checked}
+ else{e.innerHTML=`${l}: <b>${v}</b><input type=range min=${mn} max=${mx} value=${v}>`;e.lastChild.oninput=x=>{S[id]=+x.target.value;e.querySelector("b").textContent=S[id]}}
+ ct.appendChild(e)});
+c.onclick=e=>{const r=c.getBoundingClientRect();o.k&&o.k(S,(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height)};
+o.i&&o.i(S);const L=()=>{if(!c.isConnected)return;S.t++;g.fillStyle=C.bg;g.fillRect(0,0,c.width,260);g.font="12px system-ui";g.textAlign="left";inf.textContent=o.d(g,c.width,260,S,C)||"";requestAnimationFrame(L)};L()}
+const p1=b=>CV(b,{c:[["n","r","Jumlah pengguna",0,200,20]],d(g,W,H,S,C){const n=S.n,cap=Math.max(1,Math.ceil(n/25));bx(g,W/2-60,15,120,45,C.bl,"☁ Cloud");for(let i=0;i<8;i++)bx(g,W/2-80+i*21,68,18,10,i<cap?C.ok:C.mu);
+for(let i=0;i<Math.min(n,60);i++){const x=20+(i%20)*(W-40)/20,y=170+Math.floor(i/20)*28;tx(g,"💻",x,y,C.fg);const p=((S.t+i*7)%60)/60;dot(g,x+8+(W/2-x-8)*p,y-8+(85-y+8)*p,2.5,C.warn)}
+return `${n} pengguna → ${cap} unit kapasitas aktif • biaya on-demand terukur: $${(cap*0.05).toFixed(2)}/jam (elastis: turun saat sepi)`}});
+const p2=b=>CV(b,{i:S=>S.m=0,c:[["m0","b","IaaS"],["m1","b","PaaS"],["m2","b","SaaS"]],a:(id,S)=>S.m=+id[1],d(g,W,H,S,C){const L=["Aplikasi","Data","Runtime","Sistem operasi","Virtualisasi","Server fisik"],k=[4,2,0][S.m];L.forEach((l,j)=>bx(g,20,10+j*40,W-40,34,j<k?C.bl:C.mu,l+" — "+(j<k?"Anda yang kelola":"Dikelola penyedia")));
+return `${["IaaS","PaaS","SaaS"][S.m]}: beban kelola Anda ${Math.round(k/6*100)}% • `+["kontrol terbesar, pekerjaan terbanyak","fokus pada kode dan data","tinggal pakai aplikasi"][S.m]}});
+const p3=b=>CV(b,{c:[["s","r","Sensitivitas data",0,100,30],["l","r","Lonjakan trafik",0,100,30]],d(g,W,H,S,C){const pv=S.s>60,pb=S.s<=60||S.l>50;bx(g,20,30,W/2-40,150,pv?C.ok:C.mu,"PRIVATE CLOUD");bx(g,W/2+20,30,W/2-40,150,pb?C.bl:C.mu,"PUBLIC CLOUD");
+for(let k=0;k<5;k++){const p=((S.t+k*12)%60)/60;if(pv)dot(g,40+(W/2-80)*.5,200-p*150,3,C.warn);if(pb)dot(g,W/2+40+(W/2-80)*p,200-p*150+k,3,C.warn)}
+tx(g,"Data sensitif: "+S.s+"%  •  Trafik: "+S.l+"%",20,225,C.fg);return "Model disarankan: "+(pv&&pb?"HYBRID (data kritis di private, lonjakan di public)":pv?"PRIVATE (data sangat sensitif)":"PUBLIC (murah dan elastis)")}});
+const p4=b=>CV(b,{i:S=>{S.vm=0;S.ct=0},c:[["a","b","+ VM (4 GB)"],["z","b","+ Container (0,5 GB)"],["r","b","Reset"]],a:(id,S)=>{const u=S.vm*4+S.ct*.5;if(id=="r")S.vm=S.ct=0;else if(id=="a"&&u+4<=16)S.vm++;else if(id=="z"&&u+.5<=16)S.ct++},d(g,W,H,S,C){const u=S.vm*4+S.ct*.5,w=W-40;g.strokeStyle=C.fg;g.strokeRect(20,60,w,70);let x=20;for(let i=0;i<S.vm;i++){bx(g,x,60,w/4-2,70,C.bl,"VM");x+=w/4}
+for(let i=0;i<S.ct;i++){bx(g,x,60,w/32-1,70,C.ok);x+=w/32}tx(g,"RAM server fisik 16 GB",20,50,C.fg);tx(g,"Biru = VM (tiap VM bawa OS sendiri)   Hijau = container (berbagi kernel)",20,160,C.fg);
+return `Terpakai ${u}/16 GB • VM ${S.vm} • Container ${S.ct}`+(S.ct>=20?" — puluhan container muat di ruang untuk 4 VM":"")}});
+const p5=b=>CV(b,{i:S=>S.n=2,c:[["tr","r","Trafik (req/detik)",0,1000,150],["p","b","+ Server"],["q","b","− Server"],["x","k","Server 1 mati"]],a:(id,S)=>{if(id=="p"&&S.n<8)S.n++;if(id=="q"&&S.n>1)S.n--},d(g,W,H,S,C){const al=S.n-(S.x?1:0),ld=al?S.tr/al:999,rh=(H-20)/S.n;bx(g,10,H/2-25,70,50,C.bl,"LB");
+for(let i=0;i<S.n;i++){const y=10+i*rh,dead=S.x&&i==0;bx(g,W-170,y,160,rh-4,dead?C.mu:ld>100?C.bad:ld>70?C.warn:C.ok,dead?"Server 1 ✖":"Server "+(i+1)+" • "+Math.round(ld)+"%");if(!dead)for(let k=0;k<3;k++){const p=((S.t*2+k*20+i*9)%60)/60;dot(g,80+(W-250)*p,H/2+(y+rh/2-H/2)*p,3,C.warn)}}
+return !al?"Semua server mati: layanan down!":ld>100?"Overload! Tambah server (horizontal scaling).":ld>70?"Padat, sebaiknya tambah server.":"Sehat: load balancer membagi beban rata, server mati dilewati (health check)."}});
+const p6=b=>CV(b,{c:[["m","k","MFA",0,0,false],["e","k","Enkripsi",0,0,false],["f","k","Firewall",0,0,false],["l","k","Least privilege",0,0,false]],d(g,W,H,S,C){const N=["Tebak password","Curi data","Pindai jaringan","Salah gunakan hak"],K=["m","e","f","l"],sx=W*.55;let r=100;
+K.forEach((k,i)=>{const y=35+i*55,pr=S[k];tx(g,"👾 "+N[i],8,y-8,C.fg);const x=150+((S.t*2+i*40)%(W-330));if(pr&&x>sx-8)tx(g,"✖",sx-14,y+4,C.bad);else dot(g,x,y,5,C.bad);if(pr){bx(g,sx,y-22,6,44,C.ok);r-=[25,20,25,15][i]}else bx(g,sx,y-22,6,44,C.mu);dot(g,W-60,y,0,C.bad)});
+bx(g,W-110,20,100,200,r>60?C.bad:r>30?C.warn:C.ok,"☁ DATA");return `Skor risiko ${Math.max(5,r-10)}/100 — `+(r>60?"TINGGI: banyak serangan menembus":r>30?"SEDANG":"RENDAH: berlapis (defense in depth)")}});
+const p7=b=>CV(b,{c:[["r","r","Faktor replikasi",1,3,2],["a","k","Zona A gagal",0,0,false],["b2","k","Zona B gagal",0,0,false],["c2","k","Zona C gagal",0,0,false]],d(g,W,H,S,C){const dd=[S.a,S.b2,S.c2],cl=["#0284c7","#10b981","#f59e0b","#8b5cf6"],av=[1,1,1,1].map(()=>0);const w=W/3;
+for(let z=0;z<3;z++){bx(g,z*w+10,20,w-20,140,dd[z]?C.mu:C.bg==="#0f172a"?"#1e293b":"#cbd5e1","");tx(g,"Zona "+"ABC"[z]+(dd[z]?" ✖":""),z*w+18,38,C.fg);
+ for(let k=0;k<4;k++)for(let r=0;r<S.r;r++)if((k+r)%3==z){bx(g,z*w+18+k*(w-40)/4,60,(w-40)/4-4,40,dd[z]?"#64748b":cl[k],"D"+(k+1));if(!dd[z])av[k]=1}}
+for(let k=0;k<4;k++)bx(g,20+k*80,185,70,28,av[k]?cl[k]:C.bad,"D"+(k+1)+(av[k]?" ✔":" hilang"));const n=av.filter(x=>x).length;return `${n}/4 data masih tersedia dengan ${S.r} replika. `+(n<4?"Naikkan replikasi atau pulihkan zona.":"Aman dari kegagalan yang ada.")}});
+const p8=b=>CV(b,{c:[["cdn","k","Aktifkan CDN",0,0,false]],k:(S,x,y)=>S.u=[x,y],d(g,W,H,S,C){const O=[50,130],E=[[W*.4,60],[W*.55,200],[W*.85,110]];S.u=S.u||[W-60,200];const dist=(a,c)=>Math.hypot(a[0]-c[0],a[1]-c[1]),ed=E.reduce((m,e)=>dist(S.u,e)<dist(S.u,m)?e:m),t=S.cdn?ed:O;
+bx(g,O[0]-40,O[1]-20,80,40,C.bl,"Origin");E.forEach(e=>{if(S.cdn)bx(g,e[0]-25,e[1]-14,50,28,C.ok,"Edge");else{g.strokeStyle=C.mu;g.strokeRect(e[0]-25,e[1]-14,50,28)}});
+g.strokeStyle=C.warn;g.beginPath();g.moveTo(S.u[0],S.u[1]);g.lineTo(t[0],t[1]);g.stroke();const p=(S.t%50)/50;dot(g,S.u[0]+(t[0]-S.u[0])*p,S.u[1]+(t[1]-S.u[1])*p,4,C.warn);tx(g,"👤",S.u[0]-7,S.u[1]+5,C.fg);tx(g,"Klik di mana saja untuk memindahkan pengguna",10,250,C.fg);
+return `Latensi ke ${S.cdn?"edge terdekat":"origin"}: ${Math.round(15+dist(S.u,t)*.5)} ms`+(S.cdn?"":" (aktifkan CDN untuk membandingkan)")}});
+const p9=b=>CV(b,{c:[["r","r","Permintaan/menit",0,200,30]],d(g,W,H,S,C){const sv=100,fn=S.r*1.2;bx(g,60,200-sv,80,sv,C.bl,"Server 24/7");bx(g,180,200-Math.min(fn,200),80,Math.min(fn,200),C.ok,"Serverless");tx(g,"$"+sv,80,190-sv,C.fg);tx(g,"$"+Math.round(fn),200,190-Math.min(fn,200),C.fg);
+for(let i=0;i<10;i++){const on=((S.t*.15+i*7.3)%10)<S.r/20;bx(g,320+(i%5)*50,40+Math.floor(i/5)*50,42,40,on?C.ok:C.mu,on?"λ ▶":"λ")}tx(g,"Fungsi menyala saat ada event",320,150,C.fg);
+return fn<sv?"Serverless lebih hemat: bayar hanya saat dieksekusi"+(S.r<10?" (waspadai cold start saat sepi)":""):"Beban tinggi dan stabil: server tetap bisa lebih murah"}});
+const p10=b=>CV(b,{i:S=>S.p=-1,c:[["o","b","Commit lulus uji"],["x","b","Commit ada bug"]],a:(id,S)=>{S.bug=id=="x";S.p=0},d(g,W,H,S,C){const N=["Commit","Build","Uji","Deploy"],w=(W-60)/4;if(S.p>=0&&S.p<4&&!(S.bug&&S.p>=2.6))S.p+=.02;
+let m="Tekan tombol untuk mengirim commit.";N.forEach((n,i)=>{const f=S.bug&&S.p>=2.6&&i==2,dn=S.p>=i+1&&!(S.bug&&i>=2),ac=S.p>=i&&S.p<i+1;bx(g,20+i*w,90,w-20,60,f?C.bad:dn?C.ok:ac?C.bl:C.mu,n+(f?" ✖":dn?" ✔":""))});
+if(S.p>=0)dot(g,20+Math.min(S.p,3.5)*w+w/2-10,175,6,C.warn);if(S.p>=0)m=S.bug&&S.p>=2.6?"Uji otomatis gagal → deploy diblokir, bug tidak sampai ke pengguna.":S.p>=4?"Semua tahap lulus → otomatis rilis ke produksi.":"Pipeline berjalan otomatis...";return m}});
+const p11=b=>CV(b,{i:S=>S.d=[],c:[["n","r","Server redundan",1,4,2],["k","b","💥 Gangguan acak"],["p","b","Pulihkan"]],a:(id,S)=>{if(id=="k"){const i=Math.floor(Math.random()*S.n);if(!S.d.includes(i))S.d.push(i)}else S.d=[]},d(g,W,H,S,C){const al=[...Array(S.n).keys()].filter(i=>!S.d.includes(i)),dn=Math.pow(.05,S.n)*8760;
+for(let i=0;i<S.n;i++){const dead=S.d.includes(i);dot(g,60+i*90,70,28,dead?C.bad:C.ok);tx(g,dead?"✖":"Srv"+(i+1),48+i*90,74,"#fff")}bx(g,W-170,40,150,60,al.length?C.ok:C.bad,al.length?"LAYANAN HIDUP":"LAYANAN MATI");
+bx(g,20,150,Math.min(W-40,(1-Math.pow(.05,S.n))*(W-40)),24,C.bl,"");tx(g,"Ketersediaan: "+((1-Math.pow(.05,S.n))*100).toFixed(3)+"%",20,195,C.fg);tx(g,"Downtime/tahun ≈ "+(dn>=1?dn.toFixed(1)+" jam":Math.round(dn*60)+" menit"),20,215,C.fg);return al.length?`${al.length}/${S.n} server hidup: ada failover, tidak ada single point of failure.`:"Semua server gagal: tambah redundansi (idealnya lintas Availability Zone)."}});
+const p12=b=>CV(b,{c:[["u","r","Tingkat pemakaian",0,100,70],["k","r","Kondisi kode",0,100,50],["w","r","Tekanan waktu",0,100,30],["s","k","Ada SaaS pengganti",0,0,false]],d(g,W,H,S,C){const R=["Rehost","Replatform","Refactor","Repurchase","Retire","Retain"],D=["Pindah apa adanya (lift and shift)","Sedikit penyesuaian, mis. ke managed DB","Tulis ulang jadi cloud-native","Ganti dengan produk SaaS","Hentikan, tak lagi dipakai","Biarkan di tempat lama"];
+let r=S.u<15?4:S.s?3:S.w>70?0:S.k<30?2:S.k<65?1:S.u>=50?0:5;R.forEach((n,i)=>bx(g,20+(i%3)*((W-40)/3),30+Math.floor(i/3)*90,(W-40)/3-10,70,i==r?C.ok:C.mu,n));return `Rekomendasi: ${R[r]} — ${D[r]}`}});
+const p13=b=>CV(b,{c:[["r","k","Right-sizing",0,0,false],["i","k","Matikan resource idle",0,0,false],["v","k","Reserved instance",0,0,false]],d(g,W,H,S,C){let cp=400,st=150,nt=100,id=120,db=200;if(S.r)cp*=.7;if(S.i)id=0;if(S.v){cp*=.75;db*=.75}const D=[["Compute",cp],["Storage",st],["Jaringan",nt],["Idle",id],["Database",db]],t=D.reduce((a,x)=>a+x[1],0),w=(W-40)/5;
+D.forEach((x,i)=>{const h=x[1]*.4;bx(g,20+i*w,200-h,w-12,h,i==3?C.bad:C.bl,"");tx(g,x[0],20+i*w,218,C.fg);tx(g,"$"+Math.round(x[1]),20+i*w,192-h,C.fg)});g.strokeStyle=C.warn;g.beginPath();g.moveTo(20,200-.4*400);g.lineTo(W-20,200-.4*400);g.stroke();tx(g,"Total $"+Math.round(t)+"/bln",20,20,C.fg);
+return t>970?"Di atas anggaran $400 per kategori puncak: lakukan optimasi.":`Total $${Math.round(t)}/bulan — hemat ${Math.round((970-t)/970*100)}% dari kondisi awal`}});
+const p14=b=>CV(b,{c:[["n","r","Jumlah sensor",1,50,12],["e","k","Edge computing",0,0,false]],d(g,W,H,S,C){const n=Math.min(S.n,16);bx(g,W*.45,90,80,60,S.e?C.ok:C.mu,"Edge");bx(g,W-100,70,90,100,C.bl,"☁ Cloud");
+for(let i=0;i<n;i++){const y=20+i*14;dot(g,25,y+5,4,C.ok);const p=((S.t+i*5)%40)/40;dot(g,25+(W*.45-25)*p,y+5+(120-y-5)*p,2.5,C.warn)}
+const m=S.e?1:Math.min(n,10);for(let k=0;k<m;k++){const p=((S.t*(S.e?.5:1)+k*9)%40)/40;dot(g,W*.45+80+(W*.55-180)*p,120,S.e?4:2.5,S.e?C.ok:C.warn)}tx(g,"🌾 Sensor kebun",10,250,C.fg);
+return `Bandwidth ke cloud ≈ ${(S.e?S.n*.02:S.n*1).toFixed(2)} MB/s • latensi respons ≈ ${S.e?5:80} ms `+(S.e?"(hanya ringkasan dikirim)":"(semua data mentah dikirim)")}});
+const PR=[
+{d:"Geser jumlah pengguna dan amati kapasitas serta biaya mengikuti pemakaian (elastis dan terukur).",f:p1},
+{d:"Klik IaaS, PaaS, atau SaaS lalu lihat lapisan yang Anda kelola dan yang dikelola penyedia.",f:p2},
+{d:"Atur sensitivitas data dan lonjakan trafik untuk menemukan model deployment yang cocok.",f:p3},
+{d:"Isi RAM server 16 GB dengan VM dan container. Mana yang muat lebih banyak?",f:p4},
+{d:"Atur trafik, tambah atau kurangi server, lalu matikan Server 1 dan amati health check serta pembagian beban.",f:p5},
+{d:"Aktifkan kontrol keamanan satu per satu dan lihat serangan mana yang tertahan.",f:p6},
+{d:"Ubah faktor replikasi dan jatuhkan zona. Berapa replika minimum agar data tetap tersedia?",f:p7},
+{d:"Klik kanvas untuk menempatkan pengguna, lalu bandingkan latensi dengan dan tanpa CDN.",f:p8},
+{d:"Geser permintaan per menit untuk menemukan titik impas biaya server vs serverless.",f:p9},
+{d:"Kirim commit yang lulus atau bermasalah dan amati pipeline CI/CD menahan bug.",f:p10},
+{d:"Ubah jumlah server redundan, picu gangguan acak, lalu lihat ketersediaan dan downtime.",f:p11},
+{d:"Atur kondisi aplikasi lama untuk mendapatkan strategi migrasi 6R yang tepat.",f:p12},
+{d:"Aktifkan praktik FinOps satu per satu dan lihat dampaknya pada tagihan bulanan.",f:p13},
+{d:"Naikkan jumlah sensor lalu bandingkan beban jaringan dengan dan tanpa edge computing.",f:p14}];
+function quiz(){const q=$("#qz"),m=MODS[cur];
+ if(!nm){q.innerHTML=`<p class="text-sm mb-2">Masukkan nama lengkap sebelum mengerjakan kuis:</p><div class="flex gap-2"><input id="nmIn" placeholder="Nama mahasiswa" class="flex-1 min-w-0 p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-transparent"><button id="nmGo" class="bg-indigo-600 text-white px-4 rounded-lg">Mulai</button></div>`;
+  $("#nmGo").onclick=()=>{const v=$("#nmIn").value.trim();if(v.length<3){$("#nmIn").focus();return}nm=v;quiz()};return}
+ const qs=m.q.trim().split("\n").map(l=>{const a=l.split("|");return{q:a[0],o:shuf(a.slice(1).map((t,i)=>[t,i==0]))}});
+ q.innerHTML=`<p class="text-sm mb-3">Peserta: <b>${esc(nm)}</b> • <button id="chg" class="underline">ganti nama</button></p>`+qs.map((x,i)=>`<div class="mb-4"><p class="font-semibold mb-1">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<label class="flex gap-2 items-start py-0.5 text-sm"><input type="radio" class="mt-1" name="q${i}" value="${j}"> ${o[0]}</label>`).join("")}<p id="fx${i}" class="text-sm mt-1 hidden"></p></div>`).join("")+`<div class="flex flex-wrap items-center gap-3"><button id="gr" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm">Periksa Jawaban</button><button id="rs" class="border border-slate-400 px-4 py-2 rounded-lg text-sm">Acak ulang</button><span id="sr" class="font-bold text-sm"></span></div>`;
+ $("#chg").onclick=()=>{nm="";quiz()};$("#rs").onclick=quiz;
+ $("#gr").onclick=()=>{let s=0;qs.forEach((x,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`),f=$("#fx"+i),ok=c&&x.o[+c.value][1];if(ok)s++;f.classList.remove("hidden");f.style.color=ok?"#059669":"#e11d48";f.textContent=ok?"✅ Benar":"❌ Salah. Jawaban benar: "+x.o.find(o=>o[1])[0]});
+  $("#sr").textContent=`${nm} — skor ${s}/${qs.length} (${Math.round(s*100/qs.length)}) ${s/qs.length>=.8?"Sangat baik! 🎉":s/qs.length>=.6?"Cukup, pelajari lagi bagian yang salah.":"Baca ulang materi lalu coba lagi."}`};}
+renderMod();
+/* ===== DIAGRAM ===== */
+const NODES=[
+["👤","Pengguna","Membuka aplikasi lewat browser atau ponsel. Permintaan HTTP dikirim lewat internet."],
+["🌐","DNS &amp; CDN","DNS menerjemahkan nama domain ke alamat IP. CDN menyajikan konten statis (gambar, CSS) dari lokasi terdekat agar cepat."],
+["⚖️","Load Balancer","Membagi permintaan ke beberapa server dan memeriksa kesehatan server (health check)."],
+["🖥️","Server Aplikasi (Auto-scaling)","Kumpulan VM atau container yang menjalankan logika aplikasi. Jumlahnya naik-turun mengikuti beban."],
+["🗄️","Database &amp; Storage","Menyimpan data terstruktur (database terkelola) dan file (object storage). Biasanya direplikasi untuk ketersediaan tinggi."],
+["📈","Monitoring &amp; Billing","Mengumpulkan metrik (CPU, latensi), memicu alarm dan auto-scaling, serta menghitung biaya pemakaian."]];
+$("#flow").innerHTML=NODES.map((n,i)=>`<button data-i="${i}" class="node card px-3 py-3 text-sm text-center hover:border-sky-500">${n[0]}<br><b>${n[1]}</b></button>${i<NODES.length-1?'<span class="text-center text-sky-500 font-bold sm:rotate-0 rotate-90">➜</span>':''}`).join("");
+function showNode(i){document.querySelectorAll(".node").forEach((b,j)=>b.style.borderColor=j==i?"#0ea5e9":"");$("#flowInfo").innerHTML=`<b>${NODES[i][0]} ${NODES[i][1]}</b><br>${NODES[i][2]}`}
+document.querySelectorAll(".node").forEach(b=>b.onclick=()=>showNode(+b.dataset.i));showNode(0);
+$("#sendReq").onclick=async()=>{const bt=$("#sendReq");bt.disabled=true;for(let i=0;i<NODES.length;i++){showNode(i);await new Promise(r=>setTimeout(r,900))}bt.disabled=false};
+
+/* ===== LAB ===== */
+const T={small:{c:100,p:.02},medium:{c:250,p:.05},large:{c:600,p:.12}};
+let vms=[{t:"small",id:1}],nid=2,cost=0,tick=0;
+function log(m){const l=$("#log");l.innerHTML+=`<div>[${new Date().toLocaleTimeString("id-ID")}] ${m}</div>`;l.scrollTop=l.scrollHeight}
+function cap(){return vms.reduce((a,v)=>a+T[v.t].c,0)}
+function render(){const tr=+$("#traf").value,cp=cap(),load=cp?tr/cp*100:999;$("#trafTxt").textContent=tr;$("#nVm").textContent=vms.length;$("#cost").textContent="$"+cost.toFixed(2).replace(".",",");
+ const per=Math.min(tr/Math.max(cp,1),1.3)*100;
+ $("#vms").innerHTML=vms.length?vms.map(v=>{const l=Math.min(Math.round(per),100),col=l>85?"#e11d48":l>70?"#f59e0b":"#10b981";return `<div><div class="flex justify-between text-xs mb-1"><span>vm-${v.id} (${v.t})</span><span>CPU ${l}%</span></div><div class="h-3 rounded-full bg-slate-200 dark:bg-slate-800"><div class="h-3 rounded-full bar" style="width:${l}%;background:${col}"></div></div></div>`}).join(""):'<p class="text-sm text-rose-500">Tidak ada server! Layanan mati.</p>';
+ const s=$("#status");let txt="Sehat",c="#10b981";if(load>100){txt="Overload ⚠️";c="#e11d48"}else if(load>70){txt="Padat";c="#f59e0b"}s.textContent=txt;s.style.cssText=`background:${c};color:#fff;padding:0 .6rem`;return load}
+$("#addVm").onclick=()=>{const t=$("#type").value;vms.push({t,id:nid++});log(`Launch vm-${nid-1} (${t})`);render()};
+$("#delVm").onclick=()=>{if(vms.length){const v=vms.pop();log(`Terminate vm-${v.id}`)}render()};
+$("#traf").oninput=render;
+setInterval(()=>{vms.forEach(v=>cost+=T[v.t].p);tick++;const load=render();
+ if($("#auto").checked){if(load>70){const v={t:"small",id:nid++};vms.push(v);log(`Auto-scaling OUT: beban ${Math.round(load)}% → launch vm-${v.id}`);render()}
+ else if(load<30&&vms.length>1){const v=vms.pop();log(`Auto-scaling IN: beban ${Math.round(load)}% → terminate vm-${v.id}`);render()}}},1000);
+log("Lingkungan cloud siap. 1 instance small berjalan.");render();
+
+</script>
+</body>
+</html>
